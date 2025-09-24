@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user and 'تعديل' or 'إضافة' }} مستخدم{% endblock %}
+{% block page_title %}{{ user and 'تعديل المستخدم' or 'إضافة مستخدم جديد' }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">{{ user and 'تعديل بيانات المستخدم' or 'إضافة مستخدم جديد' }}</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">الاسم الكامل</label>
+                        <input type="text" class="form-control" id="name" name="name" 
+                               value="{{ user.name if user }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">البريد الإلكتروني</label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               value="{{ user.email if user }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="whatsapp_number" class="form-label">رقم الواتساب</label>
+                        <input type="text" class="form-control" id="whatsapp_number" name="whatsapp_number" 
+                               value="{{ user.whatsapp_number if user }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="university_id" class="form-label">الجامعة</label>
+                        <select class="form-control" id="university_id" name="university_id">
+                            <option value="">اختر الجامعة</option>
+                            {% for university in universities %}
+                            <option value="{{ university.id }}" 
+                                    {{ 'selected' if user and user.university_id == university.id }}>
+                                {{ university.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                            {{ user and 'كلمة المرور الجديدة (اتركها فارغة إذا لم ترغب في التغيير)' or 'كلمة المرور' }}
+                        </label>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               {{ 'required' if not user }}>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-warning">{{ user and 'تحديث' or 'إضافة' }}</button>
+                        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">رجوع</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

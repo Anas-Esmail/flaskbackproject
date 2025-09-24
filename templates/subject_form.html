@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}{% if subject %}تعديل مادة{% else %}إضافة مادة{% endif %}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">{% if subject %}تعديل مادة{% else %}إضافة مادة جديدة{% endif %}</h4>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-right me-1"></i> رجوع
+    </a>
+</div>
+
+<div class="card card-dashboard">
+    <div class="card-body">
+        <form method="POST">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="name" class="form-label">اسم المادة</label>
+                    <input type="text" class="form-control" id="name" name="name" 
+                           value="{{ subject.name if subject }}" required>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="university_id" class="form-label">الجامعة</label>
+                    <select class="form-select" id="university_id" name="university_id" required>
+                        <option value="">اختر الجامعة</option>
+                        {% for university in universities %}
+                        <option value="{{ university.id }}" 
+                            {% if subject and subject.university_id == university.id %}selected{% endif %}>
+                            {{ university.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label for="discussion_group" class="form-label">رابط مجموعة المناقشة</label>
+                <input type="url" class="form-control" id="discussion_group" name="discussion_group" 
+                       value="{{ subject.discussion_group if subject }}" placeholder="https://chat.whatsapp.com/...">
+                <div class="form-text">رابط مجموعة واتساب للمناقشة الخاصة بهذه المادة (اختياري)</div>
+            </div>
+            
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-lg me-1"></i> {% if subject %}تعديل{% else %}إضافة{% endif %}
+                </button>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">إلغاء</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

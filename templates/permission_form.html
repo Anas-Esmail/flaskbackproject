@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}إدارة الصلاحيات{% endblock %}
+{% block page_title %}إدارة صلاحيات الطلاب{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="user_id" class="form-label">الطالب</label>
+                <select class="form-select" id="user_id" name="user_id" required>
+                    <option value="">اختر الطالب</option>
+                    {% for student in students %}
+                    <option value="{{ student.id }}" 
+                        {% if permission and permission.user_id == student.id %}selected{% endif %}>
+                        {{ student.name }} - {{ student.email }} - {{ student.university.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">المواد المتاحة</label>
+                <div class="border p-3 rounded" style="max-height: 300px; overflow-y: auto;">
+                    {% for subject in subjects %}
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" 
+                               name="subject_ids" value="{{ subject.id }}" 
+                               id="subject{{ subject.id }}"
+                               {% if permission and permission.subject_id == subject.id %}checked{% endif %}>
+                        <label class="form-check-label" for="subject{{ subject.id }}">
+                            {{ subject.name }} - {{ subject.university.name }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="form-text">اختر المواد التي تريد منحها للطالب</div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+                {% if permission %}تعديل{% else %}منح الصلاحيات{% endif %}
+            </button>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">رجوع</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

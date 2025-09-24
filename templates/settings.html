@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}إعدادات الحساب{% endblock %}
+{% block page_title %}إعدادات الحساب{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5>بيانات الطالب</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>الاسم:</strong> {{ user.name }}</p>
+            <p><strong>البريد الإلكتروني:</strong> {{ user.email }}</p>
+            <p><strong>رقم الواتساب:</strong> {{ user.whatsapp_number or 'غير متوفر' }}</p>
+            <p><strong>الجامعة:</strong> {{ user.university.name if user.university else 'غير محدد' }}</p>
+        </div>
+    </div>
+
+    <!-- المواد المصرح له -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h5>المواد المصرح لك بها</h5>
+        </div>
+        <div class="card-body">
+            {% if subjects %}
+            <ul class="list-group">
+                {% for subject in subjects %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ subject.name }}
+                    {% if subject.discussion_group %}
+                    <a href="{{ subject.discussion_group }}" target="_blank" class="btn btn-sm btn-success">
+                        <i class="bi bi-whatsapp"></i> الانضمام لجروب المناقشة
+                    </a>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>ليس لديك أي مواد مصرح بها بعد.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- تغيير كلمة المرور -->
+    <div class="card mb-4">
+        <div class="card-header bg-warning text-dark">
+            <h5>تغيير كلمة المرور</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('change_password') }}">
+                <div class="mb-3">
+                    <label for="current_password" class="form-label">كلمة المرور الحالية</label>
+                    <input type="password" class="form-control" id="current_password" name="current_password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="new_password" class="form-label">كلمة المرور الجديدة</label>
+                    <input type="password" class="form-control" id="new_password" name="new_password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="confirm_password" class="form-label">تأكيد كلمة المرور الجديدة</label>
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">تغيير كلمة المرور</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- إرسال مشكلة فنية -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5>الإبلاغ عن مشكلة فنية</h5>
+        </div>
+        <div class="card-body">
+            <p>يمكنك إرسال رسالة مباشرة على الرقم التالي عبر واتساب:</p>
+            <a href="https://wa.me/593974796" target="_blank" class="btn btn-success">
+                <i class="bi bi-whatsapp"></i> إرسال مشكلة فنية
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

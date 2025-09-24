@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}{% if lesson %}تعديل درس{% else %}إضافة درس{% endif %}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">{% if lesson %}تعديل درس{% else %}إضافة درس جديد{% endif %}</h4>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-right me-1"></i> رجوع
+    </a>
+</div>
+
+<div class="card card-dashboard">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="title" class="form-label">عنوان الدرس</label>
+                    <input type="text" class="form-control" id="title" name="title" 
+                           value="{{ lesson.title if lesson }}" required>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="subject_id" class="form-label">المادة</label>
+                    <select class="form-select" id="subject_id" name="subject_id" required>
+                        <option value="">اختر المادة</option>
+                        {% for subject in subjects %}
+                        <option value="{{ subject.id }}" 
+                            {% if lesson and lesson.subject_id == subject.id %}selected{% endif %}>
+                            {{ subject.name }} - {{ subject.university.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label for="video_file" class="form-label">رفع فيديو (MP4 فقط)</label>
+                <input type="file" class="form-control" id="video_file" name="video_file" accept=".mp4" {% if not lesson %}required{% endif %}>
+                <div class="form-text">{% if lesson %}اختر ملفًا جديدًا لتغيير الفيديو الحالي.{% else %}يجب رفع فيديو للدرس.{% endif %}</div>
+                
+                {% if lesson and lesson.video_path %}
+                <div class="mt-2">
+                    <label class="form-label">الفيديو الحالي:</label>
+                    <div class="alert alert-info p-2">
+                        {{ lesson.video_path }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-lg me-1"></i> {% if lesson %}تعديل{% else %}إضافة{% endif %}
+                </button>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">إلغاء</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

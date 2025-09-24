@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{% if university %}تعديل جامعة{% else %}إضافة جامعة{% endif %}{% endblock %}
+{% block page_title %}{% if university %}تعديل جامعة{% else %}إضافة جامعة جديدة{% endif %}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">اسم الجامعة</label>
+                <input type="text" class="form-control" id="name" name="name" 
+                       value="{{ university.name if university }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="whatsapp_group" class="form-label">رابط مجموعة واتساب الجامعة</label>
+                <input type="url" class="form-control" id="whatsapp_group" name="whatsapp_group" 
+                       value="{{ university.whatsapp_group if university }}">
+                <div class="form-text">رابط مجموعة واتساب الخاصة بالجامعة (اختياري)</div>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                {% if university %}تعديل{% else %}إضافة{% endif %}
+            </button>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">رجوع</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

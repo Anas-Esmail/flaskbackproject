@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الطالب - منصة الأفضل التعليمية</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --light-bg: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--light-bg);
+            padding-top: 56px;
+        }
+        
+        .navbar {
+            background: linear-gradient(to right, var(--primary), #2980b9);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+        }
+        
+        .sidebar {
+            background-color: white;
+            min-height: calc(100vh - 56px);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+            width: 250px;
+            position: fixed;
+            top: 56px;
+            right: 0;
+            padding-top: 20px;
+        }
+        
+        .sidebar .nav-link {
+            color: #555;
+            padding: 12px 20px;
+            margin: 5px 0;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--primary);
+        }
+        
+        .sidebar .nav-link i {
+            margin-left: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-right: 250px;
+            padding: 20px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            border-radius: 12px 12px 0 0 !important;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), #2980b9);
+            border: none;
+            border-radius: 8px;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(to right, #2980b9, var(--primary));
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .alert {
+            border: none;
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                top: 0;
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- شريط التنقل العلوي -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-graduation-cap me-2"></i>منصة الأفضل التعليمية
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> {{ user.name }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{{ url_for('settings') }}"><i class="fas fa-cog me-2"></i>الإعدادات</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-2"></i>تسجيل الخروج</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    
+    <!-- المحتوى الرئيسي -->
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-user-graduate me-2"></i>لوحة الطالب</h2>
+            <div>
+                <span class="badge bg-primary p-2">
+                    <i class="fas fa-university me-1"></i> {{ user.university.name if user.university else "غير محدد" }}
+                </span>
+            </div>
+        </div>
+
+        <!-- بطاقة الترحيب -->
+        <div class="card mb-4 border-primary">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="text-primary">مرحباً بك، {{ user.name }}</h4>
+                        <p class="text-muted">هذه لوحة تحكمك الشخصية حيث يمكنك الوصول إلى موادك الدراسية ومتابعة تقدمك.</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="bg-primary p-3 rounded text-white">
+                            <h5>عدد المواد المسجلة</h5>
+                            <h3>{{ subjects|length }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- المواد الدراسية -->
+        <h4 class="mb-3"><i class="fas fa-book me-2"></i>المواد الدراسية</h4>
+        
+        {% if subjects %}
+        <div class="row">
+            {% for subject in subjects %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">{{ subject.name }}</h5>
+                        <small>{{ subject.university.name }}</small>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">عدد الدروس: {{ subject.lessons|length }}</p>
+                        {% if subject.discussion_group %}
+                        <p class="card-text">
+                            <small>
+                                <a href="{{ subject.discussion_group }}" target="_blank" class="text-decoration-none">
+                                    <i class="fab fa-whatsapp me-1"></i> مجموعة المناقشة
+                                </a>
+                            </small>
+                        </p>
+                        {% endif %}
+                        <div class="d-grid">
+                            <a href="{{ url_for('lessons', subject_id=subject.id) }}" class="btn btn-outline-primary">عرض الدروس</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info text-center">
+            <h4><i class="fas fa-info-circle me-2"></i>لا توجد مواد مسجلة لك</h4>
+            <p class="mb-0">يرجى التواصل مع المسؤول لمنحك صلاحيات الوصول إلى المواد.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

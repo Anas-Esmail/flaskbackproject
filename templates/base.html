@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الأفضل التعليمية - {% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f5f7f9;
+            color: #333;
+            padding-top: 56px;
+        }
+        
+        .navbar-custom {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar {
+            background: var(--secondary);
+            color: white;
+            position: fixed;
+            top: 56px;
+            right: 0;
+            bottom: 0;
+            width: 250px;
+            padding: 20px 0;
+            transition: all 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .sidebar.collapsed {
+            transform: translateX(250px);
+        }
+        
+        .sidebar a {
+            color: rgba(255, 255, 255, 0.9);
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            border-right: 3px solid transparent;
+        }
+        
+        .sidebar a:hover, .sidebar a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-right-color: var(--primary);
+        }
+        
+        .sidebar a i {
+            margin-left: 10px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-right: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .main-content.expanded {
+            margin-right: 0;
+        }
+        
+        .card-dashboard {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+        }
+        
+        .card-dashboard:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            opacity: 0.8;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), #2980b9);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(to right, #2980b9, var(--primary));
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* تخصيص للهواتف */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(250px);
+                width: 250px;
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+            
+            .navbar-toggler {
+                order: -1;
+                margin-left: 15px;
+            }
+        }
+        
+        /* تأثيرات للكروت */
+        .card-hover-effect {
+            transition: transform 0.3s;
+        }
+        
+        .card-hover-effect:hover {
+            transform: translateY(-3px);
+        }
+        
+        /* تخصيص الألوان للكروت */
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, var(--primary), #2980b9);
+        }
+        
+        .bg-gradient-success {
+            background: linear-gradient(135deg, var(--success), #229954);
+        }
+        
+        .bg-gradient-info {
+            background: linear-gradient(135deg, var(--info), #138d75);
+        }
+        
+        .bg-gradient-warning {
+            background: linear-gradient(135deg, var(--warning), #e67e22);
+        }
+    </style>
+</head>
+<body>
+    <!-- شريط التنقل العلوي -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="bi bi-mortarboard-fill me-2"></i>منصة الأفضل
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" 
+                    aria-controls="navbarContent" aria-expanded="false" aria-label="تبديل التنقل">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="bi bi-box-arrow-left me-1"></i>تسجيل الخروج
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- الشريط الجانبي -->
+    <div class="sidebar d-none d-lg-block" id="sidebar">
+        <h5 class="px-4 mb-4 text-center">لوحة التحكم</h5>
+        
+        <div class="nav flex-column">
+            <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                <i class="bi bi-speedometer2"></i>لوحة التحكم
+            </a>
+            <a href="{{ url_for('manage_university') }}" class="nav-link {% if request.endpoint == 'manage_university' %}active{% endif %}">
+                <i class="bi bi-building"></i>إدارة الجامعات
+            </a>
+            <a href="{{ url_for('manage_subject') }}" class="nav-link {% if request.endpoint == 'manage_subject' %}active{% endif %}">
+                <i class="bi bi-journal-bookmark"></i>إدارة المواد
+            </a>
+            <a href="{{ url_for('manage_lesson') }}" class="nav-link {% if request.endpoint == 'manage_lesson' %}active{% endif %}">
+                <i class="bi bi-play-btn"></i>إدارة الدروس
+            </a>
+            <a href="{{ url_for('manage_permission') }}" class="nav-link {% if request.endpoint == 'manage_permission' %}active{% endif %}">
+                <i class="bi bi-shield-lock"></i>إدارة الصلاحيات
+            </a>
+        </div>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="main-content" id="mainContent">
+        <!-- زر عرض/إخفاء الشريط الجانبي على الهواتف -->
+        <button class="btn btn-primary mb-3 d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#mobileSidebar">
+            <i class="bi bi-list"></i> القائمة
+        </button>
+        
+        <!-- الشريط الجانبي للهواتف -->
+        <div class="collapse d-lg-none mb-4" id="mobileSidebar">
+            <div class="card">
+                <div class="card-body">
+                    <div class="nav flex-column">
+                        <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                            <i class="bi bi-speedometer2 me-2"></i>لوحة التحكم
+                        </a>
+                        <a href="{{ url_for('manage_university') }}" class="nav-link {% if request.endpoint == 'manage_university' %}active{% endif %}">
+                            <i class="bi bi-building me-2"></i>إدارة الجامعات
+                        </a>
+                        <a href="{{ url_for('manage_subject') }}" class="nav-link {% if request.endpoint == 'manage_subject' %}active{% endif %}">
+                            <i class="bi bi-journal-bookmark me-2"></i>إدارة المواد
+                        </a>
+                        <a href="{{ url_for('manage_lesson') }}" class="nav-link {% if request.endpoint == 'manage_lesson' %}active{% endif %}">
+                            <i class="bi bi-play-btn me-2"></i>إدارة الدروس
+                        </a>
+                        <a href="{{ url_for('manage_permission') }}" class="nav-link {% if request.endpoint == 'manage_permission' %}active{% endif %}">
+                            <i class="bi bi-shield-lock me-2"></i>إدارة الصلاحيات
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- رسائل التنبيه -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <i class="bi bi-info-circle me-2"></i>{{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- محتوى الصفحة -->
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // إضافة تأثيرات تفاعلية
+        document.addEventListener('DOMContentLoaded', function() {
+            // إضافة تأثيرات للكروت
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.classList.add('card-hover-effect');
+            });
+            
+            // إدارة الشريط الجانبي على الشاشات الصغيرة
+            const sidebarToggler = document.querySelector('[data-bs-target="#mobileSidebar"]');
+            const mobileSidebar = document.getElementById('mobileSidebar');
+            
+            if (sidebarToggler && mobileSidebar) {
+                sidebarToggler.addEventListener('click', function() {
+                    const isExpanded = mobileSidebar.classList.contains('show');
+                    this.innerHTML = isExpanded ? 
+                        '<i class="bi bi-list"></i> القائمة' : 
+                        '<i class="bi bi-x-lg"></i> إغلاق';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}إدارة الصلاحيات{% endblock %}
+{% block page_title %}إدارة صلاحيات الطلاب{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            <!-- اختيار الطالب -->
+            <div class="mb-3">
+                <label for="user_id" class="form-label">الطالب</label>
+                <select class="form-select" id="user_id" name="user_id" required onchange="this.form.submit()">
+                    <option value="">اختر الطالب</option>
+                    {% for student in students %}
+                    <option value="{{ student.id }}" {% if selected_user and selected_user.id == student.id %}selected{% endif %}>
+                        {{ student.name }} - {{ student.email }} - {{ student.university.name if student.university else 'غير محدد' }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- عرض المواد الخاصة بجامعة الطالب المحدد -->
+            {% if selected_user %}
+            <div class="mb-3">
+                <label class="form-label">المواد المتاحة للجامعة: {{ selected_user.university.name }}</label>
+                <div class="border p-3 rounded" style="max-height: 300px; overflow-y: auto;">
+                    {% for subject in subjects %}
+                        {% if subject.university_id == selected_user.university_id %}
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox"
+                                   name="subject_ids" value="{{ subject.id }}"
+                                   id="subject{{ subject.id }}"
+                                   {% if subject.id in granted_subject_ids %}checked{% endif %}>
+                            <label class="form-check-label" for="subject{{ subject.id }}">
+                                {{ subject.name }}
+                                {% if subject.discussion_group %}
+                                <a href="{{ subject.discussion_group }}" target="_blank" class="btn btn-sm btn-success ms-2">
+                                    الانضمام للجروب
+                                </a>
+                                {% endif %}
+                            </label>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="form-text">اختر المواد التي تريد منحها للطالب</div>
+            </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary">
+                {% if selected_user %}تحديث الصلاحيات{% else %}منح الصلاحيات{% endif %}
+            </button>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">رجوع</a>
+        </form>
+
+        <!-- زر ارسال مشكلة فنية عبر واتساب -->
+        <div class="mt-3">
+            <a href="https://wa.me/593974796" target="_blank" class="btn btn-danger">
+                إرسال مشكلة فنية
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
